@@ -4,6 +4,7 @@
     { "path": "packages/core" },
     { "path": "packages/react" },
     { "path": "packages/widget" },
-    { "path": "packages/figma-plugin" }
+    { "path": "packages/figma-plugin" },
+    { "path": "packages/cli" }
   ]
 }

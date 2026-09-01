@@ -14,6 +14,9 @@ export {
   isLayoutEntry,
 } from "./config";
 
+export { FONT_PAIRS, CURATED_FONTS, getFontPairById, fontPairToEntry } from "./data/fonts";
+export { googleFontsHref, fontshareHref, getFontPairHrefs, applyFontPair } from "./data/fontLoader";
+
 export {
   DEFAULT_STORAGE_KEY_PREFIX,
   DEFAULT_ATTRIBUTE_PREFIX,
@@ -34,6 +37,8 @@ export type {
 } from "./types";
 
 export type { SphereSwitchStorage, StorageLike } from "./storage";
+
+export type { FontFace, FontPair, FontSource } from "./data/fonts";
 
 export type {
   ColorVariable,
