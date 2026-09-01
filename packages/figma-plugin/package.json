@@ -1,0 +1,49 @@
+{
+  "name": "@sphereswitch/figma-plugin",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Plugin de Figma de SphereSwitch y puente WebSocket local para sincronización en vivo con el navegador.",
+  "license": "MIT",
+  "author": "Alerrandro Heron Ferreira",
+  "keywords": [
+    "figma",
+    "figma-plugin",
+    "theming",
+    "design-tokens"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "manifest.json"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "clean": "rimraf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@sphereswitch/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.109.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

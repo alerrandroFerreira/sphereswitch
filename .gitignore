@@ -3,14 +3,18 @@ node_modules/
 dist/
 build/
 .turbo/
+.next/
+out/
 coverage/
 *.tsbuildinfo
 
 # Entorno y logs
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 *.log
+npm-debug.log*
+pnpm-debug.log*
 .DS_Store
 Thumbs.db
 

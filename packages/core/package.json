@@ -1,0 +1,47 @@
+{
+  "name": "@sphereswitch/core",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Motor de theming en tiempo real, agnóstico de framework: persiste el estado activo de cada dimensión y refleja el identificador en un atributo data-* del DOM.",
+  "license": "MIT",
+  "author": "Alerrandro Heron Ferreira",
+  "keywords": [
+    "theming",
+    "design-tokens",
+    "localstorage",
+    "framework-agnostic"
+  ],
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src",
+    "clean": "rimraf dist .turbo *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

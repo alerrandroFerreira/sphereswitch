@@ -1,0 +1,7 @@
+{
+  "name": "@sphereswitch/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Sitio de documentación de SphereSwitch (Fumadocs). No se publica en npm."
+}

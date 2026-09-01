@@ -1,0 +1,53 @@
+{
+  "name": "@sphereswitch/react",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Hooks de React y Provider opcional sobre @sphereswitch/core, construidos con useSyncExternalStore.",
+  "license": "MIT",
+  "author": "Alerrandro Heron Ferreira",
+  "keywords": [
+    "react",
+    "theming",
+    "hooks",
+    "usesyncexternalstore"
+  ],
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "clean": "rimraf dist .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@sphereswitch/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "react": "^19.0.0",
+    "rimraf": "^6.0.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

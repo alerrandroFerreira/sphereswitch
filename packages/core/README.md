@@ -1,0 +1,69 @@
+# @sphereswitch/core
+
+Motor de theming en tiempo real, agnóstico de framework. Persiste el identificador
+activo de cada _dimensión_ (fuente, paleta, layout, o cualquier extensión propia)
+en `localStorage` y lo refleja en un atributo `data-*` del elemento raíz. No pinta
+nada: es el CSS del proyecto consumidor el que reacciona a ese atributo.
+
+## Instalación
+
+```
+pnpm add @sphereswitch/core
+```
+
+## Uso
+
+```ts
+import { createStore } from "@sphereswitch/core";
+
+const store = createStore({
+  dimensions: [
+    { name: "font", values: ["sans", "serif", "mono"], defaultValue: "sans" },
+    { name: "palette", values: ["slate", "terracotta"], defaultValue: "slate" },
+    { name: "layout", values: ["bento", "editorial"], defaultValue: "bento" },
+  ],
+});
+
+store.set("palette", "terracotta");
+// -> localStorage["sphereswitch:palette"] = "terracotta"
+// -> <html data-sphereswitch-palette="terracotta">
+// -> window dispatch "sphereswitch:change"
+```
+
+## API
+
+| Método                                     | Descripción                                                                               |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `subscribe(listener)`                      | Registra un listener; devuelve la función de baja. Compatible con `useSyncExternalStore`. |
+| `getSnapshot()`                            | Estado actual, síncrono. Referencia estable mientras no cambie.                           |
+| `getServerSnapshot()`                      | Estado por defecto, sin tocar `window`/`localStorage`. Seguro en SSR.                     |
+| `get(dimension)` / `set(dimension, value)` | Lee / fija el valor de una dimensión.                                                     |
+| `reset(dimension?)`                        | Devuelve una dimensión (o todas) a su valor por defecto.                                  |
+| `isPersistent()`                           | `false` si `localStorage` no está disponible y se usa memoria volátil.                    |
+| `destroy()`                                | Desengancha listeners internos.                                                           |
+
+### Anti-FOUC
+
+```ts
+import { generateFoucScript } from "@sphereswitch/core";
+
+const script = generateFoucScript(config); // string de JS vanilla para el <head>
+```
+
+### SSR
+
+```ts
+import { getServerState } from "@sphereswitch/core";
+
+const serverState = getServerState(config); // estado por defecto, sin efectos
+```
+
+## Garantías
+
+- **Cero dependencias de producción.**
+- Degradación limpia cuando `localStorage` no está disponible (incógnito, política
+  del navegador, servidor): estado en memoria, sin excepciones.
+- Sincronización entre pestañas mediante el evento nativo `storage`.
+- Valores corruptos o de formatos anteriores caen al valor por defecto.
+
+MIT
