@@ -4,6 +4,8 @@ export { createStore } from "./store";
 export { getServerState } from "./ssr";
 export { generateFoucScript } from "./fouc";
 export { createStorage } from "./storage";
+export { createHistory } from "./history";
+export { createComboNamer, COMBO_ADJECTIVES } from "./comboNames";
 
 export {
   defineConfig,
@@ -31,6 +33,7 @@ export {
   meetsWcagAa,
   WCAG_AA_NORMAL,
 } from "./data/color";
+export { generateCssBlock, generateTokenMap } from "./data/codegen";
 
 export {
   DEFAULT_STORAGE_KEY_PREFIX,
@@ -53,10 +56,14 @@ export type {
 
 export type { SphereSwitchStorage, StorageLike } from "./storage";
 
+export type { Combo, HistoryEntry, HistoryOptions, SphereSwitchHistory } from "./history";
+export type { ComboNamer } from "./comboNames";
+
 export type { FontFace, FontPair, FontSource } from "./data/fonts";
 
 export type { Palette, PaletteColors } from "./data/palettes";
 export type { Rgb } from "./data/color";
+export type { CssBlockInput } from "./data/codegen";
 
 export type {
   ColorVariable,

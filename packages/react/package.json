@@ -31,6 +31,7 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "lint": "eslint src",
     "clean": "rimraf dist .turbo *.tsbuildinfo"
   },
@@ -41,6 +42,7 @@
     "react": ">=18"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",

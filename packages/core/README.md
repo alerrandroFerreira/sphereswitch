@@ -82,6 +82,18 @@ Incluye dos catálogos curados, ambos con licencia real documentada:
 Las entradas que se inspiran en algo reconocible marcan `isApproximation` y
 `approximationNote`, en términos neutros — nunca el nombre de una marca.
 
+## Historial y utilidades
+
+- `createHistory(store)` — pila de hasta 50 combinaciones en `localStorage` (con
+  su propia clave), con cursor de deshacer/rehacer: cualquier cambio nuevo tras
+  deshacer trunca el futuro.
+- `createComboNamer()` — nombres automáticos `<paleta> <adjetivo> #<n>`; el
+  número no se reutiliza nunca y la misma combinación siempre recibe el mismo
+  nombre.
+- `generateCssBlock({ font, palette })` / `generateTokenMap(...)` — bloque de
+  custom properties de la combinación activa; fuente única para la consola de
+  código y la exportación.
+
 ## Garantías
 
 - **Cero dependencias de producción.**

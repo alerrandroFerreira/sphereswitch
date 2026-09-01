@@ -91,10 +91,35 @@ import { lazy } from "react";
 Carga perezosa real: solo la variante activa pesa en el bundle. Antes de montar
 pinta siempre la primera variante (SSR-safe, igual patrón que el resto de hooks).
 
-## SSR
+## SSR y anti-parpadeo (FOUC)
 
 Los hooks devuelven el valor por defecto hasta que el componente monta, de modo
-que el primer render de cliente coincide con el del servidor. Combínalo con el
-script anti-parpadeo para que no haya destello.
+que el primer render de cliente coincide con el del servidor.
+
+El `<SphereSwitchProvider>` inyecta además un `<script>` bloqueante en el árbol
+(por defecto; `injectFoucScript={false}` lo desactiva). Ese script hace **una
+sola lectura síncrona** de `localStorage` para **todas** las dimensiones
+registradas y aplica todos los atributos `data-*` antes de la primera pintura —
+así no hay destello de tema incorrecto al recargar. Colócalo en el layout raíz.
+
+En Next.js App Router:
+
+```tsx
+// app/layout.tsx
+import { SphereSwitchProvider } from "@sphereswitch/react";
+import config from "../sphereswitch.config";
+
+export default function RootLayout({ children }) {
+  return <SphereSwitchProvider config={config}>{children}</SphereSwitchProvider>;
+}
+```
+
+**Content-Security-Policy estricta:** un script inline necesita un `nonce`, o el
+navegador lo bloquea **en silencio** (sin error visible, con parpadeo de vuelta).
+Pásalo por la prop `nonce`, con el mismo valor que uses en la cabecera CSP:
+
+```tsx
+<SphereSwitchProvider config={config} nonce={nonce}>
+```
 
 MIT
