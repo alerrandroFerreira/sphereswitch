@@ -5,6 +5,7 @@
     { "path": "packages/react" },
     { "path": "packages/widget" },
     { "path": "packages/figma-plugin" },
-    { "path": "packages/cli" }
+    { "path": "packages/cli" },
+    { "path": "packages/bridge" }
   ]
 }

@@ -2,7 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { isEmbeddedPreview } from "@sphereswitch/core";
-import { useHistory, useRemix, useSystemSync, useUsageStats } from "@sphereswitch/react";
+import {
+  useFigmaBridge,
+  useHistory,
+  useRemix,
+  useSystemSync,
+  useUsageStats,
+} from "@sphereswitch/react";
 import { ABCompare } from "./ABCompare";
 import type { ABCombo } from "./ABCompare";
 import { ColorLab } from "./color/ColorLab";
@@ -41,6 +47,7 @@ export function SphereSwitchWidget({ position = "bottom-right" }: SphereSwitchWi
   const history = useHistory();
   const { undo, redo } = history;
   const { toggle: toggleSystemSync } = useSystemSync();
+  const { toggle: toggleFigmaBridge } = useFigmaBridge();
   const { remix, rejectCurrent } = useRemix();
   useUsageStats(); // arranca el registro de estadísticas locales
   const embedded = isEmbeddedPreview();
@@ -69,6 +76,7 @@ export function SphereSwitchWidget({ position = "bottom-right" }: SphereSwitchWi
     compareAB,
     openColorLab,
     toggleSystemSync,
+    toggleFigmaBridge,
     remix,
     rejectCurrent,
     undo,

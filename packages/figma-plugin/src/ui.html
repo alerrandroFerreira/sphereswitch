@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font:
+          12px/1.4 -apple-system,
+          "Segoe UI",
+          sans-serif;
+        margin: 12px;
+        color: #1c1c1c;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #666;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 8px;
+      }
+      #status[data-status="open"] {
+        color: #0a7d33;
+      }
+      #status[data-status="closed"] {
+        color: #b91c1c;
+      }
+      button {
+        padding: 6px 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <label for="bridge-url">Puente local</label>
+    <input id="bridge-url" value="ws://localhost:51037" />
+    <p>Estado: <strong id="status">—</strong></p>
+    <button id="reconnect" type="button">Reconectar</button>
+    <script src="ui.js"></script>
+  </body>
+</html>

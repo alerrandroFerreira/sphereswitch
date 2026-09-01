@@ -12,6 +12,7 @@ export { useComboName } from "./useComboName";
 export { useSystemSync } from "./useSystemSync";
 export { useRemix } from "./useRemix";
 export { useUsageStats } from "./useUsageStats";
+export { useFigmaBridge, DEFAULT_BRIDGE_URL } from "./useFigmaBridge";
 
 export type { DimensionTuple } from "./useDimension";
 export type { SphereSwitchProviderProps } from "./types";
@@ -20,3 +21,4 @@ export type { UseHistoryResult } from "./useHistory";
 export type { UseSystemSyncResult } from "./useSystemSync";
 export type { UseRemixResult } from "./useRemix";
 export type { UseUsageStatsResult } from "./useUsageStats";
+export type { UseFigmaBridgeResult } from "./useFigmaBridge";

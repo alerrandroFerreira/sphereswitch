@@ -17,6 +17,7 @@ export { createHistory } from "./history";
 export { createComboNamer, COMBO_ADJECTIVES, comboKey } from "./comboNames";
 export { createRejectedCombos } from "./rejectedCombos";
 export { createUsageStats } from "./stats";
+export { connectBridge } from "./bridge";
 
 export {
   defineConfig,
@@ -77,6 +78,7 @@ export type { Combo, HistoryEntry, HistoryOptions, SphereSwitchHistory } from ".
 export type { ComboNamer } from "./comboNames";
 export type { RejectedCombos } from "./rejectedCombos";
 export type { UsageStats, ComboUsage } from "./stats";
+export type { BridgeConnection, BridgeMessage, BridgeStatus, ConnectBridgeOptions } from "./bridge";
 export type { CssBlockInput, ExportFormat } from "./data/codegen";
 
 export type { FontFace, FontPair, FontSource } from "./data/fonts";

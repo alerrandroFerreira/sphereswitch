@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineConfig, getPaletteById } from "@sphereswitch/core";
 import { SphereSwitchProvider } from "./SphereSwitchProvider";
 import { usePalette } from "./useDimensions";
+import { useFigmaBridge } from "./useFigmaBridge";
 import { useRemix } from "./useRemix";
 import { useSystemSync } from "./useSystemSync";
 import { resetGlobalStoreForTests } from "./internal/store";
@@ -65,6 +66,16 @@ describe("useSystemSync", () => {
       expect(getPaletteById(result.current.palette[0])?.mode).toBe("dark");
     });
     expect(localStorage.getItem("sphereswitch:system-sync")).toBe("1");
+  });
+});
+
+describe("useFigmaBridge", () => {
+  it("empieza desactivado y persiste el flag al activarlo", () => {
+    const { result } = renderHook(() => useFigmaBridge(), { wrapper });
+    expect(result.current.enabled).toBe(false);
+    act(() => result.current.toggle());
+    expect(result.current.enabled).toBe(true);
+    expect(localStorage.getItem("sphereswitch:figma-bridge")).toBe("1");
   });
 });
 

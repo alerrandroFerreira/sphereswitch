@@ -1,0 +1,13 @@
+{
+  "name": "SphereSwitch — sincronización en vivo",
+  "id": "sphereswitch-live-sync",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "dist/ui.html",
+  "documentAccess": "dynamic-page",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["ws://localhost:*", "ws://127.0.0.1:*"],
+    "reasoning": "Se conecta únicamente al puente WebSocket local (sphereswitch-bridge) para recibir cambios de tema en vivo. No accede a ninguna red externa."
+  }
+}

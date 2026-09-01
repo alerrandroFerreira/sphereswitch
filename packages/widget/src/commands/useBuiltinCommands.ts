@@ -11,6 +11,7 @@ export interface BuiltinCommandsOptions {
   readonly compareAB: () => void;
   readonly openColorLab: () => void;
   readonly toggleSystemSync: () => void;
+  readonly toggleFigmaBridge: () => void;
   readonly remix: () => void;
   readonly rejectCurrent: () => void;
   readonly undo: () => void;
@@ -30,6 +31,7 @@ export function useBuiltinCommands({
   compareAB,
   openColorLab,
   toggleSystemSync,
+  toggleFigmaBridge,
   remix,
   rejectCurrent,
   undo,
@@ -101,6 +103,13 @@ export function useBuiltinCommands({
         execute: toggleSystemSync,
       }),
       commandRegistry.register({
+        id: "toggle-figma-bridge",
+        label: "Sincronizar con Figma",
+        category: "Color",
+        shortcut: { key: "b", mod: true, shift: true },
+        execute: toggleFigmaBridge,
+      }),
+      commandRegistry.register({
         id: "remix",
         label: "Combinación aleatoria",
         category: "Combos",
@@ -138,6 +147,7 @@ export function useBuiltinCommands({
     compareAB,
     openColorLab,
     toggleSystemSync,
+    toggleFigmaBridge,
     remix,
     rejectCurrent,
     undo,

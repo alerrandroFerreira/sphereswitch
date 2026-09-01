@@ -1,13 +1,16 @@
 import { defineConfig } from "tsup";
 
+// El sandbox de Figma no soporta módulos ESM: `code.ts` y `ui.ts` se empaquetan
+// como IIFE con todo dentro. postbuild.mjs inserta el bundle de la UI dentro de
+// ui.html para dejar un único archivo autocontenido.
 export default defineConfig({
-  entry: ["src/index.ts"],
-  format: ["esm"],
+  entry: ["src/code.ts", "src/ui.ts"],
+  format: ["iife"],
   tsconfig: "tsconfig.build.json",
-  dts: true,
+  dts: false,
   clean: true,
-  sourcemap: true,
-  treeshake: true,
-  target: "es2022",
-  external: ["@sphereswitch/core"],
+  sourcemap: false,
+  target: "es2020",
+  noExternal: [/.*/],
+  outExtension: () => ({ js: ".js" }),
 });

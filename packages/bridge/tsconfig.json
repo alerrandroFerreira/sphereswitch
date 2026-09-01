@@ -4,10 +4,9 @@
     "composite": true,
     "outDir": "./.tsbuild",
     "rootDir": "src",
-    "types": ["@figma/plugin-typings"],
+    "types": ["node"],
     "tsBuildInfoFile": "./.tsbuild/tsconfig.tsbuildinfo"
   },
-  "references": [{ "path": "../core" }],
   "include": ["src"],
   "exclude": ["dist", "node_modules"]
 }
