@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ChangeEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
@@ -13,6 +13,7 @@ import {
 } from "@sphereswitch/core";
 import type { ColorVisionType } from "@sphereswitch/core";
 import { usePalette } from "@sphereswitch/react";
+import { srOnly } from "../a11y";
 import { extractPalette } from "./imagePalette";
 
 export interface ColorLabProps {
@@ -32,7 +33,6 @@ export function ColorLab({ open, onOpenChange }: ColorLabProps) {
   const [paletteId] = usePalette();
   const [swatches, setSwatches] = useState<string[]>([]);
   const [vision, setVision] = useState<Vision>("normal");
-  const imgRef = useRef<HTMLImageElement | null>(null);
 
   const active = getPaletteById(paletteId);
   const ratio = active ? contrastRatio(active.colors.background, active.colors.foreground) : null;
@@ -48,7 +48,6 @@ export function ColorLab({ open, onOpenChange }: ColorLabProps) {
     const url = URL.createObjectURL(file);
     const image = new Image();
     image.onload = () => {
-      imgRef.current = image;
       setSwatches(extractPalette(image, 5));
       URL.revokeObjectURL(url);
     };
@@ -59,10 +58,11 @@ export function ColorLab({ open, onOpenChange }: ColorLabProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="sphereswitch-root sphereswitch-palette-overlay" />
-        <Dialog.Content
-          className="sphereswitch-root sphereswitch-lab"
-          aria-label="Análisis de color de SphereSwitch"
-        >
+        <Dialog.Content className="sphereswitch-root sphereswitch-lab">
+          <Dialog.Title style={srOnly}>Análisis de color de SphereSwitch</Dialog.Title>
+          <Dialog.Description style={srOnly}>
+            Extracción de paleta desde imagen, simulación de daltonismo y lectura de contraste.
+          </Dialog.Description>
           <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
             <filter id={FILTER_ID} colorInterpolationFilters="sRGB">
               {matrixValues ? <feColorMatrix type="matrix" values={matrixValues} /> : null}

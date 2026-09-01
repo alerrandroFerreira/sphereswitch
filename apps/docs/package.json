@@ -5,7 +5,6 @@
   "type": "module",
   "description": "Sitio de documentación de SphereSwitch (Fumadocs). No se publica en npm.",
   "dependencies": {
-    "@sphereswitch/core": "workspace:*",
     "@sphereswitch/react": "workspace:*"
   },
   "devDependencies": {

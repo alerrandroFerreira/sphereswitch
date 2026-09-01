@@ -7,7 +7,7 @@ import type { SphereSwitchConfig, SphereSwitchStore } from "@sphereswitch/core";
  * los hooks devuelven algo coherente y no rompen, pero para cambiar valores
  * hace falta una configuración real.
  */
-export const FALLBACK_CONFIG: SphereSwitchConfig = {
+const FALLBACK_CONFIG: SphereSwitchConfig = {
   dimensions: DEFAULT_DIMENSION_NAMES.map((name) => ({
     name,
     values: ["default"],

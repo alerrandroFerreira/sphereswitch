@@ -11,6 +11,7 @@ import {
 } from "@sphereswitch/core";
 import type { ExportFormat } from "@sphereswitch/core";
 import { useFont, usePalette } from "@sphereswitch/react";
+import { srOnly } from "../a11y";
 
 // Import perezoso: ni un byte de Monaco en la red hasta que este panel se abre.
 const CodeConsole = lazy(() => import("./CodeConsole"));
@@ -65,10 +66,11 @@ export function ConsolePanel({ open, onOpenChange }: ConsolePanelProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="sphereswitch-root sphereswitch-palette-overlay" />
-        <Dialog.Content
-          className="sphereswitch-root sphereswitch-console"
-          aria-label="Consola de código de SphereSwitch"
-        >
+        <Dialog.Content className="sphereswitch-root sphereswitch-console">
+          <Dialog.Title style={srOnly}>Consola de código de SphereSwitch</Dialog.Title>
+          <Dialog.Description style={srOnly}>
+            La combinación de tema activa como código, de solo lectura.
+          </Dialog.Description>
           <div className="sphereswitch-console-bar">
             <span role="tablist" aria-label="Formato de exportación">
               {FORMATS.map((entry) => (

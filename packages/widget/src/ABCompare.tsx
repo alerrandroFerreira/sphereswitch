@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { EMBED_PARAM, PREVIEW_PARAM, serializePreviewValue } from "@sphereswitch/core";
+import { srOnly } from "./a11y";
 
 export interface ABCombo {
   readonly font?: string;
@@ -92,10 +93,11 @@ export function ABCompare({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="sphereswitch-root sphereswitch-palette-overlay" />
-        <Dialog.Content
-          className="sphereswitch-root sphereswitch-ab"
-          aria-label="Comparación A/B de SphereSwitch"
-        >
+        <Dialog.Content className="sphereswitch-root sphereswitch-ab">
+          <Dialog.Title style={srOnly}>Comparación A/B de SphereSwitch</Dialog.Title>
+          <Dialog.Description style={srOnly}>
+            Dos vistas de la página con combinaciones de tema distintas, con scroll sincronizado.
+          </Dialog.Description>
           <div className="sphereswitch-ab-pane">
             <span className="sphereswitch-ab-label">{labelA}</span>
             <iframe

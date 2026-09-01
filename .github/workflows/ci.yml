@@ -2,12 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,14 +25,47 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Los pasos reales de calidad se activan en el Goal 19, cuando ya hay
-      # código y tests que ejecutar. Hasta entonces, CI solo valida que la
-      # instalación del workspace es reproducible.
-      # - name: Lint
-      #   run: pnpm lint
-      # - name: Typecheck
-      #   run: pnpm typecheck
-      # - name: Test
-      #   run: pnpm test
-      # - name: Build
-      #   run: pnpm build
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Dead code (knip)
+        run: pnpm knip
+
+      - name: Build
+        run: pnpm -r build
+
+      - name: Unit tests
+        run: pnpm -r --if-present test
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build core (dependencia del test visual)
+        run: pnpm --filter @sphereswitch/core build
+
+      - name: Install Playwright browser
+        run: pnpm --filter @sphereswitch/react exec playwright install --with-deps chromium
+
+      - name: FOUC visual test
+        run: pnpm --filter @sphereswitch/react test:e2e

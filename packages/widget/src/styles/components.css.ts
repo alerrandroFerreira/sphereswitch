@@ -288,12 +288,18 @@ export const COMPONENTS_CSS = `
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Cualquier animación o transición del widget, presente o futura. */
+  .sphereswitch-root,
+  .sphereswitch-root *,
   .sphereswitch-orb,
   .sphereswitch-palette-overlay,
   .sphereswitch-palette,
-  .sphereswitch-console {
-    animation: none !important;
-    transition: none !important;
+  .sphereswitch-console,
+  .sphereswitch-ab,
+  .sphereswitch-lab {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
 `;

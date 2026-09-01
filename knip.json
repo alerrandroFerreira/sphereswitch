@@ -1,0 +1,25 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignoreDependencies": ["@vitest/coverage-v8"],
+  "workspaces": {
+    "packages/core": {
+      "entry": ["templates/sphereswitch.config.{ts,js}"]
+    },
+    "packages/react": {
+      "entry": ["e2e/*.spec.ts"]
+    },
+    "packages/cli": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "packages/bridge": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "packages/figma-plugin": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "apps/docs": {
+      "entry": ["examples/**/*.{ts,tsx}!"],
+      "project": "examples/**/*.{ts,tsx}"
+    }
+  }
+}

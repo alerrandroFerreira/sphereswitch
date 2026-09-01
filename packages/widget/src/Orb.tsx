@@ -35,6 +35,7 @@ export function Orb({ position, onActivate }: OrbProps) {
       data-testid="sphereswitch-orb"
       onClick={onActivate}
       aria-label="Abrir el centro de comandos de SphereSwitch"
+      aria-haspopup="dialog"
       style={{
         background: `radial-gradient(circle at 30% 30%, ${accent}, transparent 70%), var(--ss-bg-elevated)`,
       }}
