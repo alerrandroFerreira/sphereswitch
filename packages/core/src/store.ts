@@ -7,6 +7,7 @@
 // DOM es un atributo `data-*` en el elemento raíz.
 
 import { emitChangeEvent } from "./events";
+import { readPreviewFromLocation } from "./preview";
 import { createStorage } from "./storage";
 import { DEFAULT_ATTRIBUTE_PREFIX, DEFAULT_EVENT_NAME, DEFAULT_STORAGE_KEY_PREFIX } from "./types";
 import type {
@@ -69,13 +70,25 @@ function freezeState(entries: Iterable<readonly [string, string]>): SphereSwitch
   return Object.freeze(Object.fromEntries(entries)) as SphereSwitchState;
 }
 
+export interface CreateStoreOptions {
+  /**
+   * Combinación forzada que gana sobre `localStorage` en la hidratación (modo
+   * preview de la comparación A/B). Por defecto se lee de la URL; pásalo
+   * explícito para fijarlo, o `null` para ignorar la URL por completo.
+   */
+  readonly preview?: Readonly<Record<string, string>> | null;
+}
+
 /**
  * Crea un store de SphereSwitch a partir de una configuración de dimensiones.
  * El estado se hidrata desde `localStorage` (con degradación a memoria si no
  * está disponible) y se refleja de inmediato en los atributos `data-*` del
  * elemento raíz.
  */
-export function createStore(config: SphereSwitchConfig): SphereSwitchStore {
+export function createStore(
+  config: SphereSwitchConfig,
+  options: CreateStoreOptions = {},
+): SphereSwitchStore {
   const resolved = resolveConfig(config);
   const storage = createStorage();
   const listeners = new Set<() => void>();
@@ -83,11 +96,16 @@ export function createStore(config: SphereSwitchConfig): SphereSwitchStore {
     resolved.dimensions.map((dimension) => [dimension.name, dimension]),
   );
 
+  const preview = options.preview === null ? {} : (options.preview ?? readPreviewFromLocation());
+  const previewedDimensions = new Set(Object.keys(preview));
+
   const defaultState = freezeState(
     resolved.dimensions.map((dimension) => [dimension.name, dimension.defaultValue] as const),
   );
 
   function readValid(dimension: DimensionConfig): string {
+    const forced = preview[dimension.name];
+    if (forced !== undefined && dimension.values.includes(forced)) return forced;
     const raw = storage.get(storageKey(resolved, dimension.name));
     if (raw !== null && dimension.values.includes(raw)) return raw;
     // Dato corrupto, ausente, o de un formato anterior: se cae al valor por defecto.
@@ -154,7 +172,9 @@ export function createStore(config: SphereSwitchConfig): SphereSwitchStore {
         `[sphereswitch] Valor "${value}" no válido para la dimensión "${dimension}".`,
       );
     }
-    commit(dimension, value, { persist: true, external: false });
+    // En modo preview, la dimensión forzada cambia en memoria pero no se
+    // persiste: nada del iframe de comparación toca el localStorage compartido.
+    commit(dimension, value, { persist: !previewedDimensions.has(dimension), external: false });
   }
 
   function reset(dimension?: string): void {
@@ -177,6 +197,9 @@ export function createStore(config: SphereSwitchConfig): SphereSwitchStore {
             (dimension) => storageKey(resolved, dimension.name) === event.key,
           );
     for (const dimension of affected) {
+      // Una dimensión forzada por el preview no se sincroniza entre pestañas:
+      // el iframe de comparación tiene que quedarse quieto.
+      if (previewedDimensions.has(dimension.name)) continue;
       commit(dimension.name, readValid(dimension), { persist: false, external: true });
     }
   }

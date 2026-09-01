@@ -221,6 +221,39 @@ describe("createStore — sincronización entre pestañas", () => {
   });
 });
 
+describe("createStore — modo preview (comparación A/B)", () => {
+  it("la combinación forzada gana sobre localStorage en la hidratación", () => {
+    localStorage.setItem("sphereswitch:palette", "slate");
+    const store = createStore(config, { preview: { palette: "terracotta" } });
+    expect(store.get("palette")).toBe("terracotta");
+    store.destroy();
+  });
+
+  it("una dimensión forzada no se persiste al cambiarla", () => {
+    const store = createStore(config, { preview: { palette: "slate" } });
+    store.set("palette", "terracotta");
+    expect(store.get("palette")).toBe("terracotta");
+    expect(localStorage.getItem("sphereswitch:palette")).toBeNull();
+    store.destroy();
+  });
+
+  it("una dimensión forzada ignora los eventos storage de otras pestañas", () => {
+    const store = createStore(config, { preview: { palette: "slate" } });
+    localStorage.setItem("sphereswitch:palette", "terracotta");
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "sphereswitch:palette", storageArea: localStorage }),
+    );
+    expect(store.get("palette")).toBe("slate");
+    store.destroy();
+  });
+
+  it("preview: null ignora la URL por completo", () => {
+    const store = createStore(config, { preview: null });
+    expect(store.get("palette")).toBe("slate");
+    store.destroy();
+  });
+});
+
 describe("createStore — prefijos personalizados", () => {
   it("usa storageKeyPrefix y attributePrefix propios", () => {
     const store = createStore({

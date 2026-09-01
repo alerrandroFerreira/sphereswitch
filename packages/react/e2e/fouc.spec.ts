@@ -98,6 +98,26 @@ test.describe("anti-FOUC", () => {
     expect(firstFrame).toEqual({ palette: "slate", font: "sans" });
   });
 
+  test("el parámetro ?sphereswitch-preview gana sobre localStorage ya en el primer frame", async ({
+    page,
+    context,
+  }) => {
+    const url = new URL(writeFixture());
+    url.searchParams.set("sphereswitch-preview", "palette:terracota,font:serif");
+
+    await context.addInitScript(() => {
+      localStorage.setItem("sphereswitch:palette", "slate");
+    });
+
+    await page.goto(url.toString(), { waitUntil: "domcontentloaded" });
+
+    const firstFrame = await page.evaluate(() => ({
+      palette: document.documentElement.getAttribute("data-sphereswitch-palette"),
+      font: document.documentElement.getAttribute("data-sphereswitch-font"),
+    }));
+    expect(firstFrame).toEqual({ palette: "terracota", font: "serif" });
+  });
+
   test("un valor corrupto en localStorage cae al por defecto, sin romper el primer frame", async ({
     page,
     context,

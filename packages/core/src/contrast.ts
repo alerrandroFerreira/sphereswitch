@@ -1,11 +1,20 @@
-// Utilidades de color mínimas, sin dependencias. Se usan para verificar el
-// contraste WCAG de las paletas curadas (Goal 8) y volverán a servir para el
-// comparador de legibilidad y la simulación de daltonismo (Goal 16).
+// Único punto de verdad del cálculo de contraste WCAG en todo el proyecto:
+// lo usan el catálogo curado (Goal 8), el comparador de legibilidad y la
+// simulación de daltonismo (Goal 16). Sin dependencias.
 
 export interface Rgb {
   readonly r: number;
   readonly g: number;
   readonly b: number;
+}
+
+/** Convierte componentes 0–255 a `#rrggbb`. */
+export function rgbToHex({ r, g, b }: Rgb): string {
+  const clamp = (n: number): string =>
+    Math.max(0, Math.min(255, Math.round(n)))
+      .toString(16)
+      .padStart(2, "0");
+  return `#${clamp(r)}${clamp(g)}${clamp(b)}`;
 }
 
 /** Convierte `#rgb` o `#rrggbb` a componentes 0–255. Lanza si el formato no es válido. */
@@ -51,6 +60,13 @@ export function contrastRatio(a: Rgb | string, b: Rgb | string): number {
 /** WCAG AA para texto normal: ratio ≥ 4.5:1. */
 export const WCAG_AA_NORMAL = 4.5;
 
+/** WCAG AAA para texto normal: ratio ≥ 7:1. */
+export const WCAG_AAA_NORMAL = 7;
+
 export function meetsWcagAa(a: Rgb | string, b: Rgb | string): boolean {
   return contrastRatio(a, b) >= WCAG_AA_NORMAL;
+}
+
+export function meetsWcagAaa(a: Rgb | string, b: Rgb | string): boolean {
+  return contrastRatio(a, b) >= WCAG_AAA_NORMAL;
 }

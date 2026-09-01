@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useHistory } from "@sphereswitch/react";
+import { isEmbeddedPreview } from "@sphereswitch/core";
+import { useHistory, useRemix, useSystemSync, useUsageStats } from "@sphereswitch/react";
+import { ABCompare } from "./ABCompare";
+import type { ABCombo } from "./ABCompare";
+import { ColorLab } from "./color/ColorLab";
 import { CommandPalette } from "./CommandPalette";
 import { CommandCheatsheet } from "./commands/CommandCheatsheet";
 import { useBuiltinCommands } from "./commands/useBuiltinCommands";
@@ -21,20 +25,30 @@ export interface SphereSwitchWidgetProps {
   readonly position?: OrbPosition;
 }
 
+function toCombo(entry: { font: string; palette: string; layout: string } | undefined): ABCombo {
+  return entry ? { font: entry.font, palette: entry.palette, layout: entry.layout } : {};
+}
+
 /** Componente raíz: compone el orbe, el command palette y el centro de comandos. */
 export function SphereSwitchWidget({ position = "bottom-right" }: SphereSwitchWidgetProps) {
   const { open, setOpen } = useCommandPalette();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [cheatsheetOpen, setCheatsheetOpen] = useState(false);
   const [consoleOpen, setConsoleOpen] = useState(false);
+  const [abOpen, setAbOpen] = useState(false);
+  const [labOpen, setLabOpen] = useState(false);
+
+  const history = useHistory();
+  const { undo, redo } = history;
+  const { toggle: toggleSystemSync } = useSystemSync();
+  const { remix, rejectCurrent } = useRemix();
+  useUsageStats(); // arranca el registro de estadísticas locales
+  const embedded = isEmbeddedPreview();
 
   useEffect(() => {
-    injectWidgetStyles();
-  }, []);
+    if (!embedded) injectWidgetStyles();
+  }, [embedded]);
 
-  // Sin filtro: alterna abierto/cerrado (⌘K, click en el orbe). Con filtro
-  // (los comandos "Cambiar fuente/paleta/layout"): siempre abre y filtra,
-  // nunca cierra por repetición.
   const openPalette = useCallback(
     (filter?: string) => {
       setSearch(filter);
@@ -45,12 +59,29 @@ export function SphereSwitchWidget({ position = "bottom-right" }: SphereSwitchWi
 
   const openCheatsheet = useCallback(() => setCheatsheetOpen(true), []);
   const openConsole = useCallback(() => setConsoleOpen(true), []);
+  const compareAB = useCallback(() => setAbOpen(true), []);
+  const openColorLab = useCallback(() => setLabOpen(true), []);
 
-  // `undo`/`redo` son métodos estables de la instancia de historial.
-  const { undo, redo } = useHistory();
-
-  useBuiltinCommands({ openPalette, openCheatsheet, openConsole, undo, redo });
+  useBuiltinCommands({
+    openPalette,
+    openCheatsheet,
+    openConsole,
+    compareAB,
+    openColorLab,
+    toggleSystemSync,
+    remix,
+    rejectCurrent,
+    undo,
+    redo,
+  });
   useCommandDispatcher();
+
+  // Dentro de un iframe de comparación no se monta el widget: el iframe muestra
+  // el sitio, no otra copia de SphereSwitch encima.
+  if (embedded) return null;
+
+  const comboA = toCombo(history.entries[history.cursor]);
+  const comboB = toCombo(history.entries[history.cursor - 1]);
 
   return (
     <div className="sphereswitch-root" data-sphereswitch-widget-root="">
@@ -62,6 +93,17 @@ export function SphereSwitchWidget({ position = "bottom-right" }: SphereSwitchWi
       />
       <CommandCheatsheet open={cheatsheetOpen} onOpenChange={setCheatsheetOpen} />
       {consoleOpen ? <ConsolePanel open={consoleOpen} onOpenChange={setConsoleOpen} /> : null}
+      {abOpen ? (
+        <ABCompare
+          open={abOpen}
+          onOpenChange={setAbOpen}
+          comboA={comboA}
+          comboB={comboB}
+          labelA="Actual"
+          labelB="Anterior"
+        />
+      ) : null}
+      {labOpen ? <ColorLab open={labOpen} onOpenChange={setLabOpen} /> : null}
     </div>
   );
 }

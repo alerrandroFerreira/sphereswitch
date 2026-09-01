@@ -16,6 +16,9 @@ export { useBuiltinCommands } from "./commands/useBuiltinCommands";
 export { CommandCheatsheet } from "./commands/CommandCheatsheet";
 export { shortcutKey, eventShortcutKey, formatShortcut } from "./commands/types";
 export { ConsolePanel } from "./console/ConsolePanel";
+export { ABCompare, previewUrl } from "./ABCompare";
+export { ColorLab } from "./color/ColorLab";
+export { extractPalette, kmeansPalette } from "./color/imagePalette";
 
 export type { SphereSwitchWidgetProps } from "./SphereSwitchWidget";
 export type { OrbProps, OrbPosition } from "./Orb";
@@ -26,3 +29,5 @@ export type { Command, Shortcut } from "./commands/types";
 export type { BuiltinCommandsOptions } from "./commands/useBuiltinCommands";
 export type { CommandCheatsheetProps } from "./commands/CommandCheatsheet";
 export type { ConsolePanelProps } from "./console/ConsolePanel";
+export type { ABCombo, ABCompareProps } from "./ABCompare";
+export type { ColorLabProps } from "./color/ColorLab";

@@ -12,6 +12,7 @@ const config: SphereSwitchConfig = {
 
 afterEach(() => {
   localStorage.clear();
+  history.replaceState(null, "", "/");
   document.documentElement.getAttributeNames().forEach((name) => {
     if (name.startsWith("data-sphereswitch-")) document.documentElement.removeAttribute(name);
   });
@@ -36,6 +37,26 @@ describe("generateFoucScript", () => {
     localStorage.setItem("sphereswitch:font", "wingdings");
     new Function(generateFoucScript(config))();
     expect(document.documentElement.getAttribute("data-sphereswitch-font")).toBe("sans");
+  });
+
+  it("el parámetro de preview de la URL gana sobre localStorage", () => {
+    localStorage.setItem("sphereswitch:palette", "slate");
+    history.replaceState(null, "", "/?sphereswitch-preview=palette:terracotta,font:serif");
+    new Function(generateFoucScript(config))();
+    expect(document.documentElement.getAttribute("data-sphereswitch-palette")).toBe("terracotta");
+    expect(document.documentElement.getAttribute("data-sphereswitch-font")).toBe("serif");
+  });
+
+  it("un valor de preview inválido cae al defecto, sin romper", () => {
+    history.replaceState(null, "", "/?sphereswitch-preview=palette:fantasma");
+    new Function(generateFoucScript(config))();
+    expect(document.documentElement.getAttribute("data-sphereswitch-palette")).toBe("slate");
+  });
+
+  it("sin parámetro de preview, sigue funcionando exactamente igual que antes", () => {
+    localStorage.setItem("sphereswitch:palette", "terracotta");
+    new Function(generateFoucScript(config))();
+    expect(document.documentElement.getAttribute("data-sphereswitch-palette")).toBe("terracotta");
   });
 
   it("neutraliza `<` para no poder cerrar el <script> inline", () => {

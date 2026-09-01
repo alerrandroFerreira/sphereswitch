@@ -98,9 +98,20 @@ que el primer render de cliente coincide con el del servidor.
 
 El `<SphereSwitchProvider>` inyecta además un `<script>` bloqueante en el árbol
 (por defecto; `injectFoucScript={false}` lo desactiva). Ese script hace **una
-sola lectura síncrona** de `localStorage` para **todas** las dimensiones
-registradas y aplica todos los atributos `data-*` antes de la primera pintura —
-así no hay destello de tema incorrecto al recargar. Colócalo en el layout raíz.
+sola lectura síncrona** para **todas** las dimensiones registradas y aplica
+todos los atributos `data-*` antes de la primera pintura — así no hay destello
+de tema incorrecto al recargar. Colócalo en el layout raíz.
+
+Precedencia por dimensión, en una sola pasada:
+
+1. `?sphereswitch-preview=palette:x,font:y` en la URL — fuerza una combinación
+   concreta solo para ese render. Lo usa la comparación A/B del widget: dos
+   iframes del mismo origen comparten `localStorage`, así que sin este parámetro
+   ambos leerían lo mismo. En ese modo, la dimensión forzada tampoco se persiste
+   ni se sincroniza entre pestañas. El parámetro `?sphereswitch-embed=1`, además,
+   evita que el widget se monte dentro del iframe.
+2. El valor persistido en `localStorage`.
+3. El valor por defecto de la dimensión.
 
 En Next.js App Router:
 

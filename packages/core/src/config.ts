@@ -27,6 +27,8 @@ export interface PaletteEntry {
    */
   readonly aprox?: boolean;
   readonly note?: string;
+  /** Modo de color para la sincronización con el sistema operativo (Goal 17). */
+  readonly mode?: "light" | "dark";
   /** Valores de variables CSS; las claves deben empezar por `--color-`. */
   readonly colors: Readonly<Record<ColorVariable, string>>;
 }

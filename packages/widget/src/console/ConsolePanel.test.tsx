@@ -73,6 +73,24 @@ describe("ConsolePanel", () => {
     });
   });
 
+  it("cambia el contenido al elegir el formato Tailwind o JSON (mismo generador)", async () => {
+    render(<ConsolePanel open onOpenChange={vi.fn()} />, { wrapper });
+    await waitFor(() => expect(screen.getByTestId("monaco")).toBeTruthy());
+
+    fireEvent.click(screen.getByRole("tab", { name: "Tailwind" }));
+    await waitFor(() => {
+      expect(screen.getByTestId("monaco").textContent).toContain("module.exports");
+    });
+
+    fireEvent.click(screen.getByRole("tab", { name: "JSON" }));
+    await waitFor(() => {
+      const shown = screen.getByTestId("monaco").textContent ?? "";
+      expect(JSON.parse(shown)).toMatchObject({
+        "--color-bg": expect.any(String),
+      });
+    });
+  });
+
   it("el botón de copiar pone el contenido exacto en el portapapeles", async () => {
     render(<ConsolePanel open onOpenChange={vi.fn()} />, { wrapper });
     await waitFor(() => expect(screen.getByTestId("monaco")).toBeTruthy());

@@ -90,9 +90,21 @@ Las entradas que se inspiran en algo reconocible marcan `isApproximation` y
 - `createComboNamer()` — nombres automáticos `<paleta> <adjetivo> #<n>`; el
   número no se reutiliza nunca y la misma combinación siempre recibe el mismo
   nombre.
-- `generateCssBlock({ font, palette })` / `generateTokenMap(...)` — bloque de
-  custom properties de la combinación activa; fuente única para la consola de
-  código y la exportación.
+- `generateExport({ font, palette }, "css" | "tailwind" | "json")` — la
+  combinación activa como CSS, snippet de Tailwind o JSON de tokens; un único
+  generador para los tres formatos.
+- `createRejectedCombos()` — combinaciones marcadas como descartadas (mismo
+  esquema de hash que los nombres automáticos); el remix aleatorio las filtra.
+- `pickPaletteForMode(id, "light" | "dark")` — paleta curada que encaja con el
+  esquema de color del sistema operativo.
+
+## Almacenamiento
+
+Casi todo se persiste en `localStorage` con claves con espacio de nombres. La
+**única excepción** son las estadísticas de uso (`createUsageStats`), que usan
+**IndexedDB**: son datos que crecen con el tiempo y `localStorage` es síncrono y
+de tamaño ajustado. Es una decisión deliberada, no una inconsistencia. Las
+estadísticas son **estrictamente locales** — nada se envía a ningún servidor.
 
 ## Garantías
 

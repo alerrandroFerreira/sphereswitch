@@ -159,12 +159,100 @@ export const COMPONENTS_CSS = `
   padding: 4px 10px;
   border: var(--ss-border-width) solid var(--ss-border);
   border-radius: var(--ss-radius-sm);
+  color: var(--ss-fg-muted);
+}
+
+.sphereswitch-console-bar button[data-active] {
   color: var(--ss-fg);
+  background: var(--ss-border);
+}
+
+.sphereswitch-console-bar [role="tablist"] {
+  display: inline-flex;
+  gap: 4px;
 }
 
 .sphereswitch-console-editor {
   flex: 1;
   min-height: 0;
+}
+
+.sphereswitch-lab {
+  position: fixed;
+  top: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(480px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: var(--ss-bg-elevated);
+  border: var(--ss-border-width) solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  box-shadow: var(--ss-shadow);
+  animation: sphereswitch-rise var(--ss-duration) var(--ss-ease);
+}
+
+.sphereswitch-lab-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--ss-font-mono);
+  font-size: 12px;
+  color: var(--ss-fg-muted);
+}
+
+.sphereswitch-lab-swatches {
+  display: flex;
+  gap: 4px;
+  height: 40px;
+}
+
+.sphereswitch-lab-swatches span {
+  flex: 1;
+  border-radius: var(--ss-radius-sm);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.sphereswitch-ab {
+  position: fixed;
+  inset: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--ss-border);
+  border: var(--ss-border-width) solid var(--ss-border);
+  border-radius: var(--ss-radius);
+  overflow: hidden;
+  box-shadow: var(--ss-shadow);
+}
+
+.sphereswitch-ab-pane {
+  position: relative;
+  background: var(--ss-bg);
+}
+
+.sphereswitch-ab-pane iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.sphereswitch-ab-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: var(--ss-radius-sm);
+  background: var(--ss-bg-elevated);
+  border: var(--ss-border-width) solid var(--ss-border);
+  font-family: var(--ss-font-mono);
+  font-size: 11px;
+  color: var(--ss-fg-muted);
 }
 
 .sphereswitch-swatch {

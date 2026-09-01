@@ -8,6 +8,11 @@ export interface BuiltinCommandsOptions {
   readonly openPalette: (filter?: string) => void;
   readonly openCheatsheet: () => void;
   readonly openConsole: () => void;
+  readonly compareAB: () => void;
+  readonly openColorLab: () => void;
+  readonly toggleSystemSync: () => void;
+  readonly remix: () => void;
+  readonly rejectCurrent: () => void;
   readonly undo: () => void;
   readonly redo: () => void;
 }
@@ -22,6 +27,11 @@ export function useBuiltinCommands({
   openPalette,
   openCheatsheet,
   openConsole,
+  compareAB,
+  openColorLab,
+  toggleSystemSync,
+  remix,
+  rejectCurrent,
   undo,
   redo,
 }: BuiltinCommandsOptions): void {
@@ -70,6 +80,41 @@ export function useBuiltinCommands({
         execute: openConsole,
       }),
       commandRegistry.register({
+        id: "compare-ab",
+        label: "Comparar A/B",
+        category: "Historial",
+        shortcut: { key: "a", mod: true, shift: true },
+        execute: compareAB,
+      }),
+      commandRegistry.register({
+        id: "color-lab",
+        label: "Análisis de color",
+        category: "Color",
+        shortcut: { key: "i", mod: true, shift: true },
+        execute: openColorLab,
+      }),
+      commandRegistry.register({
+        id: "toggle-system-sync",
+        label: "Sincronizar con el modo del sistema",
+        category: "Color",
+        shortcut: { key: "s", mod: true, shift: true },
+        execute: toggleSystemSync,
+      }),
+      commandRegistry.register({
+        id: "remix",
+        label: "Combinación aleatoria",
+        category: "Combos",
+        shortcut: { key: "r", mod: true, shift: true },
+        execute: remix,
+      }),
+      commandRegistry.register({
+        id: "reject-current",
+        label: "Descartar esta combinación",
+        category: "Combos",
+        shortcut: { key: "x", mod: true, shift: true },
+        execute: rejectCurrent,
+      }),
+      commandRegistry.register({
         id: "undo",
         label: "Deshacer",
         category: "Historial",
@@ -86,5 +131,16 @@ export function useBuiltinCommands({
       }),
     ];
     return () => unregisters.forEach((unregister) => unregister());
-  }, [openPalette, openCheatsheet, openConsole, undo, redo]);
+  }, [
+    openPalette,
+    openCheatsheet,
+    openConsole,
+    compareAB,
+    openColorLab,
+    toggleSystemSync,
+    remix,
+    rejectCurrent,
+    undo,
+    redo,
+  ]);
 }

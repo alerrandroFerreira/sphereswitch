@@ -41,7 +41,8 @@ export interface ComboNamer {
   nameFor(combo: Combo, paletteLabel: string): string;
 }
 
-function comboKey(combo: Combo): string {
+/** Clave canónica de una combinación. Único esquema de hash de combos del proyecto. */
+export function comboKey(combo: Combo): string {
   return `${combo.font}|${combo.palette}|${combo.layout}`;
 }
 

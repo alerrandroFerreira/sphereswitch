@@ -1,11 +1,22 @@
 // Único punto de entrada público de @sphereswitch/core.
 
 export { createStore } from "./store";
+export type { CreateStoreOptions } from "./store";
+export {
+  PREVIEW_PARAM,
+  EMBED_PARAM,
+  parsePreviewValue,
+  serializePreviewValue,
+  readPreviewFromLocation,
+  isEmbeddedPreview,
+} from "./preview";
 export { getServerState } from "./ssr";
 export { generateFoucScript } from "./fouc";
 export { createStorage } from "./storage";
 export { createHistory } from "./history";
-export { createComboNamer, COMBO_ADJECTIVES } from "./comboNames";
+export { createComboNamer, COMBO_ADJECTIVES, comboKey } from "./comboNames";
+export { createRejectedCombos } from "./rejectedCombos";
+export { createUsageStats } from "./stats";
 
 export {
   defineConfig,
@@ -25,15 +36,21 @@ export {
   getPaletteById,
   paletteToEntry,
   paletteContrast,
+  pickPaletteForMode,
 } from "./data/palettes";
 export {
   hexToRgb,
+  rgbToHex,
   relativeLuminance,
   contrastRatio,
   meetsWcagAa,
+  meetsWcagAaa,
   WCAG_AA_NORMAL,
-} from "./data/color";
-export { generateCssBlock, generateTokenMap } from "./data/codegen";
+  WCAG_AAA_NORMAL,
+} from "./contrast";
+export { colorVisionMatrix, COLOR_VISION_TYPES } from "./colorVision";
+export type { ColorVisionType } from "./colorVision";
+export { generateCssBlock, generateTokenMap, generateExport } from "./data/codegen";
 
 export {
   DEFAULT_STORAGE_KEY_PREFIX,
@@ -58,12 +75,14 @@ export type { SphereSwitchStorage, StorageLike } from "./storage";
 
 export type { Combo, HistoryEntry, HistoryOptions, SphereSwitchHistory } from "./history";
 export type { ComboNamer } from "./comboNames";
+export type { RejectedCombos } from "./rejectedCombos";
+export type { UsageStats, ComboUsage } from "./stats";
+export type { CssBlockInput, ExportFormat } from "./data/codegen";
 
 export type { FontFace, FontPair, FontSource } from "./data/fonts";
 
 export type { Palette, PaletteColors } from "./data/palettes";
-export type { Rgb } from "./data/color";
-export type { CssBlockInput } from "./data/codegen";
+export type { Rgb } from "./contrast";
 
 export type {
   ColorVariable,

@@ -8,7 +8,7 @@
 // - Cada paleta cumple WCAG AA (contraste background/foreground ≥ 4.5:1); el
 //   ratio real está calculado y guardado, no verificado a ojo.
 
-import { contrastRatio } from "./color";
+import { contrastRatio } from "../contrast";
 import type { PaletteEntry } from "../config";
 
 export interface PaletteColors {
@@ -21,6 +21,8 @@ export interface PaletteColors {
 
 export interface Palette {
   readonly id: string;
+  /** Modo de color: qué esquema del sistema operativo encaja con esta paleta. */
+  readonly mode: "light" | "dark";
   readonly name: string;
   readonly colors: PaletteColors;
   /** Referencia neutra del origen visual. */
@@ -35,6 +37,7 @@ export interface Palette {
 export const PALETTES: readonly Palette[] = [
   {
     id: "pizarra-fria",
+    mode: "dark",
     name: "Pizarra Fría",
     colors: {
       background: "#0f172a",
@@ -48,6 +51,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "terracota-serena",
+    mode: "light",
     name: "Terracota Serena",
     colors: {
       background: "#f4ede4",
@@ -62,6 +66,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "bosque-nordico",
+    mode: "dark",
     name: "Bosque Nórdico",
     colors: {
       background: "#0f1a14",
@@ -75,6 +80,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "papel-tinta",
+    mode: "light",
     name: "Papel y Tinta",
     colors: {
       background: "#faf8f3",
@@ -90,6 +96,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "medianoche-ambar",
+    mode: "dark",
     name: "Medianoche Ámbar",
     colors: {
       background: "#12100e",
@@ -105,6 +112,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "niebla-costera",
+    mode: "light",
     name: "Niebla Costera",
     colors: {
       background: "#eef2f3",
@@ -120,6 +128,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "vino-y-piedra",
+    mode: "light",
     name: "Vino y Piedra",
     colors: {
       background: "#f5f1ec",
@@ -133,6 +142,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "acero-brutalista",
+    mode: "light",
     name: "Acero Brutalista",
     colors: {
       background: "#e8e8e6",
@@ -146,6 +156,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "jardin-japones",
+    mode: "light",
     name: "Jardín Japonés",
     colors: {
       background: "#f2f0e9",
@@ -159,6 +170,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "tinta-china",
+    mode: "light",
     name: "Tinta China",
     colors: {
       background: "#f7f5f0",
@@ -172,6 +184,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "cobre-oxidado",
+    mode: "dark",
     name: "Cobre Oxidado",
     colors: {
       background: "#1a1e1d",
@@ -185,6 +198,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "arena-del-desierto",
+    mode: "light",
     name: "Arena del Desierto",
     colors: {
       background: "#faf3e7",
@@ -198,6 +212,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "lavanda-bruma",
+    mode: "light",
     name: "Lavanda y Bruma",
     colors: {
       background: "#f4f2f7",
@@ -211,6 +226,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "bauhaus-primario",
+    mode: "light",
     name: "Bauhaus Primario",
     colors: {
       background: "#f5f4f0",
@@ -225,6 +241,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "noche-polar",
+    mode: "dark",
     name: "Noche Polar",
     colors: {
       background: "#0d1420",
@@ -240,6 +257,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "oliva-y-lino",
+    mode: "light",
     name: "Oliva y Lino",
     colors: {
       background: "#f3f1e7",
@@ -253,6 +271,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "grafito-neon",
+    mode: "dark",
     name: "Grafito Neón",
     colors: {
       background: "#131315",
@@ -269,6 +288,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "rosa-del-desierto",
+    mode: "light",
     name: "Rosa del Desierto",
     colors: {
       background: "#fbf3f0",
@@ -282,6 +302,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "azulejo-portugues",
+    mode: "light",
     name: "Azulejo Portugués",
     colors: {
       background: "#f6f8fb",
@@ -295,6 +316,7 @@ export const PALETTES: readonly Palette[] = [
   },
   {
     id: "ceniza-y-brasa",
+    mode: "dark",
     name: "Ceniza y Brasa",
     colors: {
       background: "#171514",
@@ -334,10 +356,22 @@ export function paletteToEntry(palette: Palette): PaletteEntry {
     id: palette.id,
     label: palette.name,
     reference: palette.reference,
+    mode: palette.mode,
     ...(palette.isApproximation ? { aprox: true } : {}),
     ...(palette.approximationNote !== undefined ? { note: palette.approximationNote } : {}),
     colors,
   };
+}
+
+/**
+ * Elige una paleta curada del modo pedido (`light`/`dark`), para la
+ * sincronización con el esquema de color del sistema operativo. Devuelve el id
+ * actual si ya encaja, o el primero del modo deseado, o `undefined` si no hay.
+ */
+export function pickPaletteForMode(currentId: string, mode: "light" | "dark"): string | undefined {
+  const current = getPaletteById(currentId);
+  if (current && current.mode === mode) return current.id;
+  return PALETTES.find((palette) => palette.mode === mode)?.id;
 }
 
 /** El catálogo de paletas en forma de entradas de configuración curadas. */

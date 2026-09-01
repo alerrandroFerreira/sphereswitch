@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { generateCssBlock, generateTokenMap } from "./codegen";
+import { generateCssBlock, generateExport, generateTokenMap } from "./codegen";
 import { fontPairToEntry, getFontPairById } from "./fonts";
 import { getPaletteById, paletteToEntry } from "./palettes";
 
@@ -37,5 +37,23 @@ describe("generateTokenMap", () => {
     const map = generateTokenMap({ font, palette });
     expect(map["--color-bg"]).toBe(palette.colors["--color-bg"]);
     expect(map["--font-display"]).toBe(font.fonts["--font-display"]);
+  });
+});
+
+describe("generateExport", () => {
+  it("el formato css reproduce exactamente generateCssBlock (mismo generador)", () => {
+    expect(generateExport({ font, palette }, "css")).toBe(generateCssBlock({ font, palette }));
+  });
+
+  it("el formato json es un objeto de tokens parseable", () => {
+    const parsed = JSON.parse(generateExport({ font, palette }, "json")) as Record<string, string>;
+    expect(parsed["--color-bg"]).toBe(palette.colors["--color-bg"]);
+  });
+
+  it("el formato tailwind mapea los tokens a theme.extend con var()", () => {
+    const out = generateExport({ font, palette }, "tailwind");
+    expect(out).toContain("module.exports");
+    expect(out).toContain('"bg": "var(--color-bg)"');
+    expect(out).toContain('"display": [');
   });
 });

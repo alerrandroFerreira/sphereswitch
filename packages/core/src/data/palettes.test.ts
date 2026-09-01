@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { contrastRatio, hexToRgb, meetsWcagAa } from "./color";
+import { contrastRatio, hexToRgb, meetsWcagAa } from "../contrast";
 import {
   CURATED_PALETTES,
   PALETTES,
   getPaletteById,
   paletteContrast,
   paletteToEntry,
+  pickPaletteForMode,
 } from "./palettes";
 
 describe("utilidades de color", () => {
@@ -73,6 +74,15 @@ describe("catálogo PALETTES", () => {
     expect(getPaletteById("inexistente")).toBeUndefined();
   });
 
+  it("todas las paletas declaran su modo de color (light/dark), sin excepción", () => {
+    for (const palette of PALETTES) {
+      expect(["light", "dark"], palette.id).toContain(palette.mode);
+    }
+    // hay de ambos modos
+    const modes = new Set(PALETTES.map((p) => p.mode));
+    expect(modes).toEqual(new Set(["light", "dark"]));
+  });
+
   it("hay tanto aproximaciones como paletas originales", () => {
     const approx = PALETTES.filter((p) => p.isApproximation).length;
     expect(approx).toBeGreaterThan(0);
@@ -100,5 +110,18 @@ describe("paletteToEntry / CURATED_PALETTES", () => {
 
   it("CURATED_PALETTES cubre todo el catálogo", () => {
     expect(CURATED_PALETTES).toHaveLength(PALETTES.length);
+  });
+});
+
+describe("pickPaletteForMode", () => {
+  it("mantiene la paleta actual si ya encaja con el modo", () => {
+    const dark = PALETTES.find((p) => p.mode === "dark")!;
+    expect(pickPaletteForMode(dark.id, "dark")).toBe(dark.id);
+  });
+
+  it("cambia a una del modo pedido si la actual no encaja", () => {
+    const light = PALETTES.find((p) => p.mode === "light")!;
+    const picked = pickPaletteForMode(light.id, "dark");
+    expect(getPaletteById(picked!)?.mode).toBe("dark");
   });
 });

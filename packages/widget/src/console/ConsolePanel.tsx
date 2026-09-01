@@ -2,8 +2,14 @@
 
 import { Suspense, lazy, useMemo, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { generateCssBlock, getFontPairById, getPaletteById } from "@sphereswitch/core";
-import { fontPairToEntry, paletteToEntry } from "@sphereswitch/core";
+import {
+  fontPairToEntry,
+  generateExport,
+  getFontPairById,
+  getPaletteById,
+  paletteToEntry,
+} from "@sphereswitch/core";
+import type { ExportFormat } from "@sphereswitch/core";
 import { useFont, usePalette } from "@sphereswitch/react";
 
 // Import perezoso: ni un byte de Monaco en la red hasta que este panel se abre.
@@ -14,29 +20,40 @@ export interface ConsolePanelProps {
   readonly onOpenChange: (open: boolean) => void;
 }
 
+const FORMATS: { readonly value: ExportFormat; readonly label: string; readonly lang: string }[] = [
+  { value: "css", label: "CSS", lang: "css" },
+  { value: "tailwind", label: "Tailwind", lang: "javascript" },
+  { value: "json", label: "JSON", lang: "json" },
+];
+
 /**
- * Consola de código: vista en vivo, de solo lectura, del bloque de custom
- * properties CSS de la combinación activa (fuente + paleta). El texto lo
- * genera `generateCssBlock` de core — la misma fuente que alimentará la
- * exportación del Goal 17.
+ * Consola de código: vista en vivo, de solo lectura, de la combinación activa
+ * (fuente + paleta). El texto lo genera `generateExport` de core — la misma
+ * función para CSS, Tailwind y JSON, no tres generadores distintos.
  */
 export function ConsolePanel({ open, onOpenChange }: ConsolePanelProps) {
   const [fontId] = useFont();
   const [paletteId] = usePalette();
+  const [format, setFormat] = useState<ExportFormat>("css");
   const [copied, setCopied] = useState(false);
 
-  const css = useMemo(() => {
+  const code = useMemo(() => {
     const fontPair = getFontPairById(fontId);
     const palette = getPaletteById(paletteId);
-    return generateCssBlock({
-      ...(fontPair ? { font: fontPairToEntry(fontPair) } : {}),
-      ...(palette ? { palette: paletteToEntry(palette) } : {}),
-    });
-  }, [fontId, paletteId]);
+    return generateExport(
+      {
+        ...(fontPair ? { font: fontPairToEntry(fontPair) } : {}),
+        ...(palette ? { palette: paletteToEntry(palette) } : {}),
+      },
+      format,
+    );
+  }, [fontId, paletteId, format]);
+
+  const language = FORMATS.find((entry) => entry.value === format)?.lang ?? "css";
 
   async function copy(): Promise<void> {
     try {
-      await navigator.clipboard.writeText(css);
+      await navigator.clipboard.writeText(code);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -53,14 +70,27 @@ export function ConsolePanel({ open, onOpenChange }: ConsolePanelProps) {
           aria-label="Consola de código de SphereSwitch"
         >
           <div className="sphereswitch-console-bar">
-            <span>combinación activa · CSS</span>
+            <span role="tablist" aria-label="Formato de exportación">
+              {FORMATS.map((entry) => (
+                <button
+                  key={entry.value}
+                  type="button"
+                  role="tab"
+                  aria-selected={format === entry.value}
+                  data-active={format === entry.value || undefined}
+                  onClick={() => setFormat(entry.value)}
+                >
+                  {entry.label}
+                </button>
+              ))}
+            </span>
             <button type="button" onClick={copy} data-testid="console-copy">
               {copied ? "Copiado" : "Copiar"}
             </button>
           </div>
           <div className="sphereswitch-console-editor" data-testid="console-editor">
             <Suspense fallback={<span className="sphereswitch-font-sample">Cargando…</span>}>
-              <CodeConsole value={css} />
+              <CodeConsole value={code} language={language} />
             </Suspense>
           </div>
         </Dialog.Content>
