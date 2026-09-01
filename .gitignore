@@ -1,0 +1,31 @@
+# Dependencias y builds
+node_modules/
+dist/
+build/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+# Entorno y logs
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+
+# Herramientas de asistencia de código — nunca en el historial público
+.claude/
+.cursor/
+.windsurf/
+.aider*
+CLAUDE.md
+AGENTS.md
+.github/copilot-instructions.md
+
+# Documentación interna de proceso — nunca en el historial público
+/docs/
