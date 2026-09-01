@@ -6,6 +6,15 @@ export { generateFoucScript } from "./fouc";
 export { createStorage } from "./storage";
 
 export {
+  defineConfig,
+  resolveCatalog,
+  resolveStoreConfig,
+  isPaletteEntry,
+  isFontPairEntry,
+  isLayoutEntry,
+} from "./config";
+
+export {
   DEFAULT_STORAGE_KEY_PREFIX,
   DEFAULT_ATTRIBUTE_PREFIX,
   DEFAULT_EVENT_NAME,
@@ -25,3 +34,19 @@ export type {
 } from "./types";
 
 export type { SphereSwitchStorage, StorageLike } from "./storage";
+
+export type {
+  ColorVariable,
+  FontVariable,
+  PaletteEntry,
+  FontPairEntry,
+  LayoutEntry,
+  DimensionInput,
+  CuratedCatalog,
+  ResolvedCatalog,
+  SphereSwitchUserConfig,
+  SphereSwitchRegisteredConfig,
+  RegisteredPaletteId,
+  RegisteredFontId,
+  RegisteredLayoutId,
+} from "./config";

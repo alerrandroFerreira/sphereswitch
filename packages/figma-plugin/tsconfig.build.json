@@ -2,7 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": false,
-    "incremental": false
+    "incremental": false,
+    "outDir": "dist",
+    "tsBuildInfoFile": null
   },
   "exclude": ["src/**/*.test.ts", "dist", "node_modules"]
 }

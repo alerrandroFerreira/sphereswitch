@@ -21,10 +21,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./sphereswitch.config.template": "./templates/sphereswitch.config.ts",
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "scripts": {
     "build": "tsup",
