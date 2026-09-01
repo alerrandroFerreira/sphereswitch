@@ -3,5 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Sitio de documentación de SphereSwitch (Fumadocs). No se publica en npm."
+  "description": "Sitio de documentación de SphereSwitch (Fumadocs). No se publica en npm.",
+  "dependencies": {
+    "@sphereswitch/core": "workspace:*",
+    "@sphereswitch/react": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "react": "^19.0.0"
+  }
 }

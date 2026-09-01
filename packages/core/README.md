@@ -58,6 +58,30 @@ import { getServerState } from "@sphereswitch/core";
 const serverState = getServerState(config); // estado por defecto, sin efectos
 ```
 
+## Configuración y catálogos curados
+
+```ts
+import { defineConfig } from "@sphereswitch/core";
+
+const config = defineConfig({
+  palettes: { extend: [{ id: "propia", colors: { "--color-bg": "#fff" } }] },
+});
+```
+
+`extend` suma al catálogo curado; `replace` lo sustituye por completo.
+
+Incluye dos catálogos curados, ambos con licencia real documentada:
+
+- **24 parejas tipográficas** (`FONT_PAIRS`) — Google Fonts y Fontshare, con
+  carga perezosa (`applyFontPair`, `googleFontsHref`, `fontshareHref`): solo se
+  descarga la pareja activa.
+- **20 paletas de color** (`PALETTES`) — todas cumplen WCAG AA
+  (`contrastRatio` calculado, no solo declarado; `contrastRatio`/`meetsWcagAa`
+  en `data/color.ts` para verificar las tuyas).
+
+Las entradas que se inspiran en algo reconocible marcan `isApproximation` y
+`approximationNote`, en términos neutros — nunca el nombre de una marca.
+
 ## Garantías
 
 - **Cero dependencias de producción.**

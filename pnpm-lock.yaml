@@ -30,7 +30,21 @@ importers:
         specifier: ^8.19.1
         version: 8.69.0(eslint@9.39.5)(typescript@5.9.3)
 
-  apps/docs: {}
+  apps/docs:
+    dependencies:
+      '@sphereswitch/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@sphereswitch/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.2
+        version: 19.2.18
+      react:
+        specifier: ^19.0.0
+        version: 19.2.8
 
   packages/cli:
     dependencies:

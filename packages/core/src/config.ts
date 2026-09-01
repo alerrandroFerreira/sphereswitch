@@ -18,8 +18,15 @@ export type FontVariable = `--font-${string}`;
 export interface PaletteEntry {
   readonly id: string;
   readonly label?: string;
-  /** Referencia real: marca o fuente de inspiración documentada. */
+  /** Referencia de origen, en términos neutros (fenómeno visual, nunca una marca). */
   readonly reference?: string;
+  /**
+   * `true` si evoca una estética reconocible descrita en términos neutros
+   * (nunca el nombre de la marca). Mismo vocabulario que `FontPairEntry.aprox`
+   * — no se invierte su sentido de una dimensión a otra.
+   */
+  readonly aprox?: boolean;
+  readonly note?: string;
   /** Valores de variables CSS; las claves deben empezar por `--color-`. */
   readonly colors: Readonly<Record<ColorVariable, string>>;
 }

@@ -58,6 +58,39 @@ solo en el Provider raíz) y resuelve la hidratación en un único sitio.
 Sin Provider: `configureGlobalStore(config)` fija la configuración del store
 global.
 
+## `LayoutSwitch`
+
+Renderiza la variante de layout activa. Un único array (`LayoutVariant[]`) es a
+la vez el metadato y el mecanismo de render — nunca hace falta mantener dos
+sitios sincronizados al añadir una variante. No asume que las variantes sean
+páginas completas: sirve igual para una sección suelta.
+
+```tsx
+import { LayoutSwitch } from "@sphereswitch/react";
+import { lazy } from "react";
+
+<LayoutSwitch
+  fallback={<p>Cargando…</p>}
+  variants={[
+    {
+      id: "bento",
+      name: "Bento",
+      description: "Rejilla",
+      component: lazy(() => import("./Bento")),
+    },
+    {
+      id: "editorial",
+      name: "Editorial",
+      description: "Revista",
+      component: lazy(() => import("./Editorial")),
+    },
+  ]}
+/>;
+```
+
+Carga perezosa real: solo la variante activa pesa en el bundle. Antes de montar
+pinta siempre la primera variante (SSR-safe, igual patrón que el resto de hooks).
+
 ## SSR
 
 Los hooks devuelven el valor por defecto hasta que el componente monta, de modo
